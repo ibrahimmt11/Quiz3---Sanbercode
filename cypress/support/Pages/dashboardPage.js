@@ -1,12 +1,10 @@
-import { loginData } from "../data/loginData";
-
 class DashboardPage {
   elements = {
     breadcrumb: () => cy.get(".oxd-topbar-header-breadcrumb"),
   };
 
-  assertDashboardOpened() {
-    cy.url({ timeout: 15000 }).should("include", loginData.path.dashboard);
+  assertDashboardOpened(dashboardPath) {
+    cy.url({ timeout: 15000 }).should("include", dashboardPath);
     this.elements.breadcrumb().should("contain.text", "Dashboard");
   }
 }

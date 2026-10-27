@@ -1,5 +1,3 @@
-import { loginData } from "../data/loginData";
-
 class ForgotPasswordPage {
   elements = {
     title: () => cy.contains("h6", "Reset Password"),
@@ -8,8 +6,8 @@ class ForgotPasswordPage {
     resetBtn: () => cy.get("button.orangehrm-forgot-password-button--reset"),
   };
 
-  assertPageOpened() {
-    cy.url().should("include", loginData.path.resetPassword);
+  assertPageOpened(resetPath) {
+    cy.url().should("include", resetPath);
     this.elements.title().should("be.visible");
   }
 
@@ -25,10 +23,8 @@ class ForgotPasswordPage {
     this.elements.resetBtn().click();
   }
 
-  assertResetSuccess() {
-    cy.contains(loginData.message.resetSuccess, { timeout: 15000 }).should(
-      "be.visible",
-    );
+  assertResetSuccess(successMessage) {
+    cy.contains(successMessage, { timeout: 15000 }).should("be.visible");
   }
 }
 

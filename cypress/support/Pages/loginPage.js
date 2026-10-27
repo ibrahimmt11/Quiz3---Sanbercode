@@ -1,5 +1,3 @@
-import { loginData } from "../data/loginData";
-
 class LoginPage {
   elements = {
     username: () => cy.get('input[name="username"]'),
@@ -12,8 +10,8 @@ class LoginPage {
       cy.get('.orangehrm-login-footer-sm a[href*="linkedin"]'),
   };
 
-  visit() {
-    cy.visit(loginData.baseUrl);
+  visit(baseUrl) {
+    cy.visit(baseUrl);
     this.elements.username().should("be.visible");
   }
 
@@ -39,30 +37,28 @@ class LoginPage {
     this.elements.forgotLink().click();
   }
 
-  assertLoginPage() {
-    cy.url().should("include", loginData.path.login);
+  assertLoginPage(loginPath) {
+    cy.url().should("include", loginPath);
     this.elements.username().should("be.visible");
   }
 
-  assertRequiredCount(count) {
+  assertRequiredCount(count, requiredMessage) {
     this.elements
       .fieldError()
       .should("have.length", count)
-      .each(($el) =>
-        cy.wrap($el).should("have.text", loginData.message.required),
-      );
+      .each(($el) => cy.wrap($el).should("have.text", requiredMessage));
   }
 
-  assertRequiredOn(field) {
+  assertRequiredOn(field, requiredMessage) {
     this.elements[field]()
       .parents(".oxd-input-group")
       .find(".oxd-input-field-error-message")
-      .should("have.text", loginData.message.required);
+      .should("have.text", requiredMessage);
   }
 
-  assertInvalidCredentials() {
-    this.elements.alertError().should("have.text", loginData.message.invalid);
-    cy.url().should("include", loginData.path.login);
+  assertInvalidCredentials(invalidMessage, loginPath) {
+    this.elements.alertError().should("have.text", invalidMessage);
+    cy.url().should("include", loginPath);
   }
 
   assertPasswordMasked(password) {
@@ -72,11 +68,11 @@ class LoginPage {
       .and("have.value", password);
   }
 
-  assertLinkedinLink() {
+  assertLinkedinLink(linkedinUrl) {
     this.elements
       .linkedinLink()
       .should("be.visible")
-      .and("have.attr", "href", loginData.linkedinUrl);
+      .and("have.attr", "href", linkedinUrl);
     this.elements.linkedinLink().should("have.attr", "target", "_blank");
   }
 }
